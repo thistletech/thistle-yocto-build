@@ -1,0 +1,42 @@
+header:
+  version: 11
+
+target: core-image-minimal
+machine: beaglebone-yocto
+distro: poky
+
+thistle-features:
+  meta-thistle: e05a0ab0e3abfc3c8fcb5371fdffa451765826af
+  updater: true
+  curl:
+    bin: false
+    lib: false
+    tls: openssl
+
+repos:
+  poky:
+    url: https://git.yoctoproject.org/git/poky
+    refspec: kirkstone
+    layers:
+      - meta
+      - meta-poky
+      - meta-yocto-bsp
+
+  meta-ti:
+    url: git://git.yoctoproject.org/meta-ti
+    refspec: kirkstone
+    layers:
+      - meta-ti-bsp
+
+  meta-arm:
+    url: git://git.yoctoproject.org/meta-arm
+    refspec: yocto-4.0.1
+    layers:
+       - meta-arm
+       - meta-arm-toolchain
+
+local_conf_header:
+  standard: |
+    PACKAGE_CLASSES = "package_ipk"
+    CONF_VERSION = "2"
+    IMAGE_INSTALL:append = " trust-m trust-m-dev"

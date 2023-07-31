@@ -1,0 +1,45 @@
+name: Release
+on:
+  push:
+    tags: ["v[0-9]+.[0-9]+.[0-9]+*"]
+
+jobs:
+  release:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout
+      uses: actions/checkout@v3
+
+    - name: dependencies
+      run: |
+        sudo apt -y update
+        sudo apt -y install musl-tools clang
+        rustup target add x86_64-unknown-linux-musl
+
+    - name: run
+      run: make release
+
+    - name: upload thistle-yocto-build
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: dist/thistle-yocto-build-x86_64-unknown-linux-musl
+        asset_name: thistle-yocto-build
+        tag: ${{ github.ref }}
+        overwrite: true
+
+    - name: upload sha256sums.txt
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: dist/sha256sums.txt
+        asset_name: sha256sums.txt
+        tag: ${{ github.ref }}
+        overwrite: true
+
+    - name: release-tag
+      run: |
+        set -euxo pipefail
+        echo "RELEASE_VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
+

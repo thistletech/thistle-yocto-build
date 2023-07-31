@@ -1,0 +1,39 @@
+name: prerelease
+on:
+  push:
+    branches:
+      - 'main'
+jobs:
+  release:
+    name: 'Build'
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout
+      uses: actions/checkout@v3
+
+    - name: 'Install dependencies'
+      run: |
+        sudo apt -y update
+        sudo apt -y install musl-tools clang
+        rustup target add x86_64-unknown-linux-musl
+
+    - name: 'Build artifacts'
+      run: make release
+
+    - name: 'Upload thistle-yocto-build'
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: dist/thistle-yocto-build-x86_64-unknown-linux-musl
+        asset_name: thistle-yocto-build
+        tag: edge
+        overwrite: true
+
+    - name: 'Upload sha256sums.txt'
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: dist/sha256sums.txt
+        asset_name: sha256sums.txt
+        tag: edge
+        overwrite: true

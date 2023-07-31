@@ -1,0 +1,22 @@
+[package]
+name = "thistle-yocto-build"
+edition = "2021"
+version = "2.0.0"
+
+[dependencies]
+anyhow = "1.0.58"
+clap = { version = "3.2.10", features = ["derive", "env"] }
+serde_yaml = "0.8.25"
+rpassword = "7.0.0"
+rand = "0.8.5"
+crypt3-sys = "0.1.0"
+serde_json = "1.0.82"
+url = "2.3.1"
+chrono = "0.4.23"
+serde = {version = "1.0.147", features = ["derive"]}
+thiserror = "1.0.37"
+num_cpus = "1.15.0"
+lazy_static = "1.4.0"
+
+[build-dependencies.built]
+version = "0.5"
