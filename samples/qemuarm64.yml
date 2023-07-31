@@ -1,0 +1,34 @@
+header:
+  version: 11
+
+target: base
+machine: qemuarm64-thistle
+distro: thistle-base
+
+thistle-features:
+  meta-thistle: e05a0ab0e3abfc3c8fcb5371fdffa451765826af
+  curl:
+    bin: true
+    lib: true
+    tls: openssl
+
+repos:
+  openembedded-core:
+    url: git://git.openembedded.org/openembedded-core
+    refspec: 54ee67b1a805a07288925d56e9956aabc23b6ab2
+    layers:
+      - meta
+
+  meta-openembedded:
+    url: git://git.openembedded.org/meta-openembedded
+    refspec: kirkstone
+    layers:
+      - meta-oe
+      - meta-python
+      - meta-networking
+      - meta-perl
+
+local_conf_header:
+  standard: |
+    PACKAGE_CLASSES = "package_rpm"
+    CONF_VERSION = "2"

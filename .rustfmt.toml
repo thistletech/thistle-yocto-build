@@ -1,0 +1,4 @@
+fn_call_width=90
+attr_fn_like_width=90
+chain_width=90
+max_width=110

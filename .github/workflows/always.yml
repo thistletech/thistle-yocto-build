@@ -1,0 +1,13 @@
+name: ci
+on: [push]
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - name: dependencies
+      uses: actions/checkout@v3
+
+    - name: run
+      run: make ci
+
