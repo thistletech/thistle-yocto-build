@@ -6,7 +6,9 @@ machine: qemuarm64-thistle
 distro: thistle-base
 
 thistle-features:
-  meta-thistle: e05a0ab0e3abfc3c8fcb5371fdffa451765826af
+  # 20240228
+  meta-thistle: e9829382a1379e60e41da482793009de536de45a
+  updater: true
   curl:
     bin: true
     lib: true
