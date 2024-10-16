@@ -17,7 +17,8 @@ thistle-features:
 repos:
   openembedded-core:
     url: git://git.openembedded.org/openembedded-core
-    refspec: 54ee67b1a805a07288925d56e9956aabc23b6ab2
+    # 2024-10-12
+    refspec: f09fca692f96c9c428e89c5ef53fbcb92ac0c9bf
     layers:
       - meta
 
