@@ -81,6 +81,11 @@ $ make release
 
 ### Build Images with Docker
 
+_Note_: The default Linux login for the built images is:
+
+- username: `thistle`
+- password: `is_awesome`
+
 #### Build QEMU image for ARM64
 
 ```sh
