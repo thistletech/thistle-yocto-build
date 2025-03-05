@@ -79,16 +79,34 @@ _note_: the project only builds on x86_64 linux due to C dependency on [crypt(3)
 $ make release
 ```
 
-### Docker Usage
+### Build Images with Docker
 
-Build image
+#### Build QEMU image for ARM64
+
 ```sh
-$ docker build -t tyb .
+$ docker build --platform=linux/amd64 \
+    -f dockerfiles/Dockerfile.qemuarm64 \
+    -t qemuarm64:latest \
+    .
+
+$ mkdir build_out && chmod 777 build_out
+# Copy built images to build_out/
+$ docker run -v "$(pwd)/build_out":/home/builder/tyb_build_out \
+    --rm -i qemuarm64:latest \
+    /bin/bash -c "cp -r /home/builder/build/deploy/images/* /home/builder/tyb_build_out/"
 ```
 
-Run build on docker image
+#### Build Raspberry Pi 4 image with [OPTIGA™ Trust-M Linux tools](https://github.com/Infineon/linux-optiga-trust-m)
+
 ```sh
-$ mkdir build
-$ cp samples/qemuarm64.yml build/
-$ docker run --rm -v $(pwd)/build:/home/builder tyb thistle-yocto-build qemuarm64.yml build debug
+$ docker build --platform=linux/amd64 \
+    -f dockerfiles/Dockerfile.rpi4-trustm \
+    -t rpi4trustm:latest \
+    .
+
+$ mkdir build_out && chmod 777 build_out
+# Copy built images to build_out/
+$ docker run -v "$(pwd)/build_out":/home/builder/tyb_build_out \
+    --rm -i rpi4trustm:latest \
+    /bin/bash -c "cp -r /home/builder/build/deploy/images/* /home/builder/tyb_build_out/"
 ```
