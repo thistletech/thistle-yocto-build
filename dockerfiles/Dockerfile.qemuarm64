@@ -1,0 +1,31 @@
+FROM ubuntu:22.04
+ARG TYB_VERSION="v2.3.0"
+RUN apt update && apt upgrade -y && \
+  DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt install -y \
+  gawk wget git-core diffstat unzip texinfo gcc-multilib \
+  build-essential chrpath socat cpio python3 python3-pip python3-pexpect \
+  xz-utils debianutils iputils-ping python3-git python3-jinja2 libegl1-mesa \
+  libsdl1.2-dev pylint xterm python3-subunit mesa-common-dev zstd lz4 file \
+  curl locales vim dpkg
+
+# RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && \
+#    locale-gen
+RUN locale-gen en_US && locale-gen en_US.UTF-8 && update-locale
+
+# Create user "builder"
+RUN useradd -m builder && \
+    cp /root/.bashrc /home/builder/ && \
+    chown -R --from=root builder /home/builder
+USER builder
+WORKDIR /home/builder
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US.UTF-8
+ENV LC_ALL en_US.UTF-8
+ENV THISTLE_YOCTO_BUILD_USERNAME thistle
+ENV THISTLE_YOCTO_BUILD_PASSWORD is_awesome
+RUN echo PIG_${TYB_VERSION}
+RUN curl -L -o thistle-yocto-build https://github.com/thistletech/thistle-yocto-build/releases/download/${TYB_VERSION}/thistle-yocto-build && \
+  chmod +x thistle-yocto-build
+RUN locale > read.txt
+RUN ./thistle-yocto-build gen-config qemu
+RUN ./thistle-yocto-build build --debug conf.yml
